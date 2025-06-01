@@ -14,7 +14,7 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-st.title("Azure AI Chat")
+st.title("Harjeet Singh AI Agent -> Git Hub Models")
 
 user_query = st.text_input("Ask the AI:")
 
