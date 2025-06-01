@@ -1,10 +1,4 @@
-langchain
-wikipedia
-langchain-community
-langchain-openai
-langchain-anthropic
-python-dotenv
-pydantic
 streamlit
 python-dotenv
-azure-openai
+azure-core
+git+https://github.com/Azure/azure-sdk-for-python.git#subdirectory=sdk/inference/azure-ai-inference
