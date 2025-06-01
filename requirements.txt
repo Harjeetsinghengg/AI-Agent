@@ -1,4 +1,6 @@
 streamlit
 azure-ai-inference
 python-dotenv
+PyMuPDF
+
 
