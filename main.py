@@ -3,7 +3,6 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
-# Use Streamlit secrets instead of .env
 token = st.secrets["GITHUB_TOKEN"]
 
 endpoint = "https://models.github.ai/inference"
