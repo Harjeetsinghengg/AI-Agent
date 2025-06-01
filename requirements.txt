@@ -5,3 +5,6 @@ langchain-openai
 langchain-anthropic
 python-dotenv
 pydantic
+streamlit
+python-dotenv
+azure-openai
