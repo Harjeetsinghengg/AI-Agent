@@ -1,12 +1,10 @@
-import os
 import streamlit as st
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-from dotenv import load_dotenv
 
-load_dotenv()
-token = os.environ.get("GITHUB_TOKEN")
+# Use Streamlit secrets instead of .env
+token = st.secrets["GITHUB_TOKEN"]
 
 endpoint = "https://models.github.ai/inference"
 model = "openai/gpt-4.1-nano"
