@@ -1,4 +1,4 @@
 streamlit
+azure-ai-inference
 python-dotenv
-azure-core
-git+https://github.com/Azure/azure-sdk-for-python.git#subdirectory=sdk/inference/azure-ai-inference
+
