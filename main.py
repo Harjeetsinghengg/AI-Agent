@@ -1,10 +1,54 @@
+# import os
+# import streamlit as st
+# from azure.ai.inference import ChatCompletionsClient
+# from azure.ai.inference.models import SystemMessage, UserMessage
+# from azure.core.credentials import AzureKeyCredential
+# from dotenv import load_dotenv
+
+# load_dotenv()
+# token = os.environ.get("GITHUB_TOKEN")
+
+# endpoint = "https://models.github.ai/inference"
+# model = "openai/gpt-4.1-nano"
+
+# client = ChatCompletionsClient(
+#     endpoint=endpoint,
+#     credential=AzureKeyCredential(token),
+# )
+
+# st.title("Azure AI Chat")
+
+# user_query = st.text_input("Ask the AI:")
+
+# if user_query:
+#     try:
+#         response = client.complete(
+#             messages=[
+#                 SystemMessage(""),
+#                 UserMessage(user_query),
+#             ],
+#             temperature=1,
+#             top_p=1,
+#             model=model
+#         )
+#         st.write("**AI:**", response.choices[0].message.content)
+#     except Exception as e:
+#         st.error(f"Error: {e}")
+
+
+import os
 import streamlit as st
+import fitz  # PyMuPDF
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
+from dotenv import load_dotenv
 
-token = st.secrets["GITHUB_TOKEN"]
+# Load environment variables
+load_dotenv()
+token = os.environ.get("GITHUB_TOKEN")
 
+# Azure AI client setup
 endpoint = "https://models.github.ai/inference"
 model = "openai/gpt-4.1-nano"
 
@@ -13,21 +57,41 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-st.title("AI Agent -> Git Hub Models")
+# Streamlit UI
+st.title("📄 AI PDF Agent")
+st.markdown("Upload a PDF and ask questions based on its content.")
 
-user_query = st.text_input("Ask the AI:")
+uploaded_file = st.file_uploader("Upload PDF", type=["pdf"])
 
-if user_query:
+pdf_text = ""
+if uploaded_file:
     try:
+        with fitz.open(stream=uploaded_file.read(), filetype="pdf") as doc:
+            pdf_text = "\n".join([page.get_text() for page in doc])
+        st.success("PDF uploaded and processed.")
+    except Exception as e:
+        st.error(f"Failed to read PDF: {e}")
+
+user_query = st.text_input("Ask a question about the PDF:")
+
+if user_query and pdf_text:
+    try:
+        system_prompt = "You are a helpful assistant. Answer the question based only on the PDF content provided."
+        combined_input = f"PDF Content:\n{pdf_text[:4000]}\n\nQuestion: {user_query}"  # Limit to first 4000 characters
+
         response = client.complete(
             messages=[
-                SystemMessage(""),
-                UserMessage(user_query),
+                SystemMessage(content=system_prompt),
+                UserMessage(content=combined_input),
             ],
-            temperature=1,
+            temperature=0.7,
             top_p=1,
             model=model
         )
-        st.write("**AI:**", response.choices[0].message.content)
+
+        st.write("**AI Answer:**", response.choices[0].message.content)
+
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Error during inference: {e}")
+elif user_query:
+    st.warning("Please upload a PDF first.")
