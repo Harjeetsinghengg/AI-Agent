@@ -46,14 +46,6 @@ Enter a question related to the document.
 View the AI-generated answer.
 
 
-📁 Project Structure
-ai-pdf-agent/
-├── app.py              # Main Streamlit app
-├── .env                # Environment variables (not committed)
-├── requirements.txt    # Python dependencies
-└── README.md           # Project documentation
-
-
 ✅ Requirements
 Python 3.8+
 Azure AI Inference endpoint and API key
